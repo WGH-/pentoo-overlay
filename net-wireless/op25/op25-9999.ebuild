@@ -6,7 +6,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit cmake-utils python-single-r1
+inherit cmake-utils python-single-r1 flag-o-matic
 
 DESCRIPTION="software-defined analyzer for APCO P25 signals"
 HOMEPAGE="http://op25.osmocom.org/wiki"
@@ -26,3 +26,11 @@ DEPEND=">=net-wireless/gnuradio-3.7:=
 	dev-libs/boost
 	net-libs/libpcap"
 RDEPEND="${DEPEND}"
+
+src_configure() {
+        # GCC 6 defaults to gnu++14, and as of May 2018, upstream
+        # doesn't build on it
+        append-cxxflags -std=gnu++98
+
+        cmake-utils_src_configure
+}
